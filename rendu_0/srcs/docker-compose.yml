@@ -3,4 +3,4 @@ services:
     container_name: nginx
     image: nginx
     ports:
-      - "4080:80"
+      - "4280:80"
