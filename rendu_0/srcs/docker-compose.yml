@@ -1,6 +1,8 @@
 services:
   nginx:
-    container_name: nginx
-    image: nginx
+    build:
+      context: ./requirements/nginx/
+    image: inception_nginx
+    container_name: inception_nginx
     ports:
       - "4280:80"
