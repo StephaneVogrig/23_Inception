@@ -13,3 +13,10 @@ Docker
 Nginx
 
 - [Running the NGINX in a Docker Container](https://hub.docker.com/)
+
+## Tuto
+
+### Server adress
+Sur la machine virtuelle ajouter `127.0.0.1 svogrig.42.fr` au debut du fichier `/etc/hosts`
+
+Dans le fichier de configuration de nginx modifier `server_name svogrig.42.fr;`
