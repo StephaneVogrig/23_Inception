@@ -6,7 +6,7 @@
 #    By: svogrig <svogrig@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/06/10 21:25:25 by svogrig           #+#    #+#              #
-#    Updated: 2025/06/10 21:46:09 by svogrig          ###   ########.fr        #
+#    Updated: 2025/06/17 13:46:49 by svogrig          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,4 +24,4 @@ clean:
 fclean:
 	docker system prune -af --volumes
 
-re: down fclean up
+re: down clean up
