@@ -23,3 +23,6 @@ Dans le fichier de configuration de nginx modifier `server_name svogrig.42.fr;`
 
 ### maria db
 http://www.net6a.com/article32/docker-exemple-dockerfile
+https://codepal.ai/dockerfile-writer/query/KiBsxvO1/dockerfile-mariadb-alpine
+
+https://www.val-r.fr/geek/os/linux/installer-un-serveur-linux-sous-debian/installation-et-configuration-du-serveur-mysql-mariadb/
