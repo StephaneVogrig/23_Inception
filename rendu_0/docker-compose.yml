@@ -1,7 +1,7 @@
 services:
   nginx:
     build:
-      context: ./requirements/nginx/
+      context: nginx/
     image: nginx
     container_name: nginx
     restart: "on-failure"
@@ -10,7 +10,7 @@ services:
 
   mariadb:
     build:
-      context: ./requirements/mariadb/
+      context: mariadb/
     image: mariadb
     container_name: mariadb
     restart: "on-failure"
