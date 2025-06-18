@@ -2,18 +2,28 @@ services:
   nginx:
     build:
       context: nginx/
+      dockerfile: Dockerfile
     image: nginx
     container_name: nginx
     restart: "on-failure"
     ports:
       - "42443:443"
+    networks:
+      - inception
 
   mariadb:
     build:
       context: mariadb/
+      dockerfile: Dockerfile
     image: mariadb
     container_name: mariadb
     restart: "on-failure"
     ports:
       - "13306:3306"
     env_file: "mariadb.env"
+    networks:
+      - inception
+
+networks:
+  inception:
+    driver: bridge
