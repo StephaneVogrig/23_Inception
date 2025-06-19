@@ -6,17 +6,17 @@
 #    By: svogrig <svogrig@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/06/10 21:25:57 by svogrig           #+#    #+#              #
-#    Updated: 2025/06/18 21:57:09 by svogrig          ###   ########.fr        #
+#    Updated: 2025/06/19 02:25:38 by svogrig          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-FROM alpine:3.21.0
+FROM alpine:3.21
 
 # install nginx
 RUN apk update \
 	&& apk upgrade \
 	&& apk add nginx openssl
-COPY conf/inception.conf /etc/nginx/http.d
+COPY server.conf /etc/nginx/http.d
 
 # install ssl
 RUN mkdir -p /etc/nginx/ssl/ \

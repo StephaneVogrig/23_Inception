@@ -6,20 +6,17 @@
 #    By: svogrig <svogrig@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/06/16 21:54:01 by svogrig           #+#    #+#              #
-#    Updated: 2025/06/17 16:18:36 by svogrig          ###   ########.fr        #
+#    Updated: 2025/06/19 02:54:56 by svogrig          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-FROM debian:buster
+FROM alpine:3.21
 
-# install mariadb
-RUN apt update -y && apt upgrade -y && apt-get install mariadb-server -y
+RUN apk add --no-cache mariadb mariadb-client
 
-COPY conf/50-server.cnf /etc/mysql/mariadb.conf.d/50-server.cnf
-
-COPY tools/run.sh /scripts/run.sh
-RUN chmod -R 755 /scripts
+COPY entrypoint.sh /scripts/entrypoint.sh
+RUN chmod +x /scripts/entrypoint.sh
 
 EXPOSE 3306/tcp
 
-ENTRYPOINT ["/scripts/run.sh"]
+ENTRYPOINT ["/scripts/entrypoint.sh"]

@@ -20,7 +20,7 @@ services:
     restart: "on-failure"
     ports:
       - "13306:3306"
-    env_file: "mariadb.env"
+    env_file: ".env"
     networks:
       - inception
 
