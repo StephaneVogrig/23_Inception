@@ -76,3 +76,6 @@ docker exec -it mariadb sh
 
 mariadb -u root -p
 
+SHOW DATABASES;
+USE <database>;
+show tables;

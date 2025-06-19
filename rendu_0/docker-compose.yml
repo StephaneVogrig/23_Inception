@@ -10,6 +10,8 @@ services:
       - "42443:443"
     networks:
       - inception
+    volumes:
+      - worldpress_data:/var/www/html
 
   mariadb:
     build:
@@ -23,6 +25,8 @@ services:
     env_file: ".env"
     networks:
       - inception
+    volumes:
+      - mariadb_data:/var/lib/mysql
 
   wordpress:
     build:
@@ -36,7 +40,23 @@ services:
     env_file: ".env"
     networks:
       - inception
+    volumes:
+      - worldpress_data:/var/www/html
 
 networks:
   inception:
     driver: bridge
+
+volumes:
+  mariadb_data:
+    driver: local
+    driver_opts:
+      type: none
+      device: /home/svogrig/data/mariadb
+      o: bind
+  worldpress_data:
+    driver: local
+    driver_opts:
+      type: none
+      device: /home/svogrig/data/wordpress
+      o: bind
