@@ -24,6 +24,19 @@ services:
     networks:
       - inception
 
+  wordpress:
+    build:
+      context: wordpress/
+      dockerfile: Dockerfile
+    image: wordpress
+    container_name: wordpress
+    restart: "on-failure"
+    ports:
+      - "9000"
+    env_file: ".env"
+    networks:
+      - inception
+
 networks:
   inception:
     driver: bridge
