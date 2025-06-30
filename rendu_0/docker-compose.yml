@@ -38,7 +38,8 @@ services:
     restart: "on-failure"
     ports:
       - "9000"
-    env_file: ".env"
+    env_file:
+      - .env
     networks:
       - inception
     volumes:

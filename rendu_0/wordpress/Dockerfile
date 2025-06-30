@@ -6,7 +6,7 @@
 #    By: svogrig <svogrig@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/06/19 03:43:34 by svogrig           #+#    #+#              #
-#    Updated: 2025/06/19 16:35:48 by svogrig          ###   ########.fr        #
+#    Updated: 2025/06/30 18:21:08 by svogrig          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -40,6 +40,11 @@ RUN apk add --no-cache \
     && rm -rf /var/cache/apk/*
 
 WORKDIR /var/www/html
+
+# Install wp-cli 
+RUN curl -o /usr/local/bin/wp https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \
+     && chmod +x /usr/locql/bin/wp
+
 RUN curl -O https://wordpress.org/latest.tar.gz && \
     tar -xzf latest.tar.gz --strip-components=1 && \
     rm latest.tar.gz
