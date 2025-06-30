@@ -20,7 +20,7 @@ log() {
 }
 
 if [ -d "/run/mysqld" ]; then
-	log "mysqld exist, skippingcreation"
+	log "mysqld exist, skipping creation"
 else
 	log "mysqld not found, creating..."
 	mkdir -p /run/mysqld
@@ -32,7 +32,8 @@ if [ ! -d "/var/lib/mysql/mysql" ]; then
   log "Database initialisation..."
   mariadb-install-db --user=mysql --basedir=/usr --datadir=/var/lib/mysql > /dev/null
 
-  mariadbd-safe --user=mysql --bootstrap <<-EOSQL
+  mariadbd --user=mysql --bootstrap <<-EOSQL
+    DROP DATABASE IF EXISTS test;
     CREATE DATABASE IF NOT EXISTS \`${MYSQL_DATABASE}\`;
     CREATE USER IF NOT EXISTS '${MYSQL_USER}'@'%' IDENTIFIED BY '${MYSQL_PASSWORD}';
     GRANT ALL PRIVILEGES ON \`${MYSQL_DATABASE}\`.* TO '${MYSQL_USER}'@'%';

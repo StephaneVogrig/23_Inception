@@ -65,9 +65,6 @@ docker system prune -af --volumes
 docker exec -it <container>
 ```
 
-
-
-
 ## Wordpress
 
 ## Mariadb

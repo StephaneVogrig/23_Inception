@@ -22,7 +22,8 @@ services:
     restart: "on-failure"
     ports:
       - "13306:3306"
-    env_file: ".env"
+    env_file:
+      - .env
     networks:
       - inception
     volumes:
@@ -49,14 +50,4 @@ networks:
 
 volumes:
   mariadb_data:
-    driver: local
-    driver_opts:
-      type: none
-      device: /home/svogrig/data/mariadb
-      o: bind
   worldpress_data:
-    driver: local
-    driver_opts:
-      type: none
-      device: /home/svogrig/data/wordpress
-      o: bind
