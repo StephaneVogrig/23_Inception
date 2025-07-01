@@ -1,15 +1,3 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    Dockerfile                                         :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: svogrig <svogrig@student.42.fr>            +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2025/06/19 03:43:34 by svogrig           #+#    #+#              #
-#    Updated: 2025/06/30 23:31:54 by svogrig          ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
-
 # FROM alpine:3.21
 
 # ENV PHP_VERSION=83
@@ -57,8 +45,6 @@
 # ENTRYPOINT ["/scripts/entrypoint.sh"]
 
 FROM debian:11
-
-LABEL author="CleSucre"
 
 RUN apt-get update -y && apt-get upgrade -y \
     && apt-get install -y \
