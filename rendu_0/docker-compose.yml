@@ -29,50 +29,23 @@ services:
     volumes:
       - mariadb_data:/var/lib/mysql
 
-  # wordpress:
-  #   build:
-  #     context: wordpress/
-  #     dockerfile: Dockerfile
-  #   image: wordpress
-  #   container_name: wordpress
-  #   restart: "on-failure"
-  #   ports:
-  #     - "9000"
-  #   env_file:
-  #     - .env
-  #   networks:
-  #     - inception
-  #   volumes:
-  #     - worldpress_data:/var/www/html
-
   wordpress:
     build:
-      context: wordpress
+      context: wordpress/
       dockerfile: Dockerfile
+    image: wordpress
     container_name: wordpress
-    restart: unless-stopped
-    environment:
-      WP_DB_HOST: mariadb
-      WP_DB_NAME: ${MYSQL_DATABASE}
-      WP_DB_USER: ${MYSQL_USER}
-      WP_DB_PASSWORD: ${MYSQL_PASSWORD}
-      WP_URL: ${DOMAIN_NAME}
-      WP_TITLE: ${WP_TITLE}
-      WP_ADMIN: ${WP_ADMIN}
-      WP_ADMIN_PASS: ${WP_ADMIN_PASS}
-      WP_ADMIN_EMAIL: ${WP_ADMIN_EMAIL}
-      WP_USER: ${WP_USER}
-      WP_EMAIL: ${WP_EMAIL}
-      WP_PASS: ${WP_PASS}
+    restart: "on-failure"
+    env_file:
+      - .env
     depends_on:
       - mariadb
-        # condition: service_healthy
     ports:
       - "9000"
-    volumes:
-      -  worldpress_data:/var/www/html
     networks:
       - inception
+    volumes:
+      - worldpress_data:/var/www/html
 
 networks:
   inception:
