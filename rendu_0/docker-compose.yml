@@ -49,6 +49,20 @@ services:
     volumes:
       - wordpress_data:/var/www/html
 
+  adminer:
+    build:
+      context: adminer/
+      dockerfile: Dockerfile
+    image: adminer
+    container_name: adminer
+    restart: "on-failure"
+    depends_on:
+      - mariadb
+    ports:
+      - "8080:8080"
+    networks:
+      - inception
+
 networks:
   inception:
     driver: bridge

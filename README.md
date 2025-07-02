@@ -71,3 +71,11 @@ https://login.42.fr:443/wp-admin
 Renseigner nom d'utilisateur et mot de passe, la page dashboard apparait. Les commentaires en attentes sont dans le cadre activite (en bas a gauche).
 - **modifier une page.**  
 Et verifier apres redemarrage qu'elle est toujours modifiees.
+
+## Bonus
+### [Adminer](https://www.adminer.org/en/)
+
+### [Redis]()
+Links:  
+- [Wikipedia - Redis](https://fr.wikipedia.org/wiki/Redis)
+- [Run Redis Open Source on Docker](https://redis.io/docs/latest/operate/oss_and_stack/install/install-stack/docker/)
