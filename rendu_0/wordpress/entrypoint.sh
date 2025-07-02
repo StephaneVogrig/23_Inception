@@ -7,17 +7,16 @@ log() {
     echo "[$(date '+%Y-%m-%d %H:%M:%S')] $1" >&2
 }
 
-# # Wait for MariaDB to be ready
-# log "Waiting for MariaDB to be ready..."
-# until nc -z -v -w3 mariadb 3306; do
-# 	log "MariaDB is unavailable - sleeping"
-# 	sleep 5
-# done
-# log "MariaDB is up - continuing"
+# Wait for MariaDB to be ready
+log "Waiting for MariaDB to be ready..."
+until nc -z -v -w3 mariadb 3306; do
+	log "MariaDB is unavailable - sleeping"
+	sleep 1
+done
+log "MariaDB is up - continuing"
 
 # Install and configure wordpress if needed
 if [ ! -f "/var/www/html/wp-config.php" ]; then
-	sleep 30
 	log "wp-config.php not found. Installingand configuring wordpress..."
 
 	log "Download WordPress core"
@@ -53,5 +52,5 @@ else
 fi
 
 log "Starting php-fpm..."
-# exec /usr/sbin/php-fpm${PHP_VERSION} -F
-exec /usr/sbin/php-fpm7.4 -F
+exec /usr/sbin/php-fpm83 -F
+# exec /usr/sbin/php-fpm7.4 -F

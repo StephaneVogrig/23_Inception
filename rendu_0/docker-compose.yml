@@ -11,7 +11,9 @@ services:
     networks:
       - inception
     volumes:
-      - worldpress_data:/var/www/html
+      - wordpress_data:/var/www/html
+    depends_on:
+      - wordpress
 
   mariadb:
     build:
@@ -45,7 +47,7 @@ services:
     networks:
       - inception
     volumes:
-      - worldpress_data:/var/www/html
+      - wordpress_data:/var/www/html
 
 networks:
   inception:
@@ -53,4 +55,4 @@ networks:
 
 volumes:
   mariadb_data:
-  worldpress_data:
+  wordpress_data:
