@@ -94,6 +94,18 @@ services:
     networks:
       - inception
 
+  g701:
+    build:
+      context: g701/
+      dockerfile: Dockerfile
+    image: g701
+    container_name: g701
+    restart: "on-failure"
+    ports:
+      - "701:701"
+    networks:
+      - inception
+
 #### not ok ####
 
   ftp:
@@ -112,17 +124,6 @@ services:
     networks:
       - inception
 
-  topo:
-    build:
-      context: topo/
-      dockerfile: Dockerfile
-    image: topo
-    container_name: topo
-    restart: "on-failure"
-    ports:
-      - "8082:80"
-    networks:
-      - inception
 
 networks:
   inception:

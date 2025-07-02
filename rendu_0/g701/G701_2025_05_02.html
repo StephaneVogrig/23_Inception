@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+        <title>Babylon.js G701</title>
+
+        <!-- Babylon.js -->           
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.6.2/dat.gui.min.js"></script>
+        <script src="https://assets.babylonjs.com/generated/Assets.js"></script>
+        <script src="https://cdn.babylonjs.com/recast.js"></script>
+        <script src="https://cdn.babylonjs.com/ammo.js"></script>
+        <script src="https://cdn.babylonjs.com/havok/HavokPhysics_umd.js"></script>
+        <script src="https://cdn.babylonjs.com/cannon.js"></script>
+        <script src="https://cdn.babylonjs.com/Oimo.js"></script>
+        <script src="https://cdn.babylonjs.com/earcut.min.js"></script>
+        <script src="https://cdn.babylonjs.com/babylon.js"></script>
+        <script src="https://cdn.babylonjs.com/materialsLibrary/babylonjs.materials.min.js"></script>
+        <script src="https://cdn.babylonjs.com/proceduralTexturesLibrary/babylonjs.proceduralTextures.min.js"></script>
+        <script src="https://cdn.babylonjs.com/postProcessesLibrary/babylonjs.postProcess.min.js"></script>
+        <script src="https://cdn.babylonjs.com/loaders/babylonjs.loaders.js"></script>
+        <script src="https://cdn.babylonjs.com/serializers/babylonjs.serializers.min.js"></script>
+        <script src="https://cdn.babylonjs.com/gui/babylon.gui.min.js"></script>
+        <script src="https://cdn.babylonjs.com/inspector/babylon.inspector.bundle.js"></script>
+
+        <style>
+            html, body {
+                overflow: hidden;
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+
+            #renderCanvas {
+                width: 100%;
+                height: 100%;
+                touch-action: none;
+            }
+        </style>
+    </head>
+<body>
+    <canvas id="renderCanvas"></canvas>
+    <script>
+        var canvas = document.getElementById("renderCanvas");
+
+        var createScene = function () {
+        	var scene = new BABYLON.Scene(engine);
+//        	scene.clearColor = new BABYLON.Color3( .5, .5, .5);
+            
+        	// camera
+        	var camera = new BABYLON.ArcRotateCamera("camera1",  0, 0, 0, new BABYLON.Vector3(0, 0, 0), scene);
+        	camera.setPosition(new BABYLON.Vector3(0, 0, -300));
+        	camera.attachControl(canvas, true);
+            
+        	// light
+        	var light = new BABYLON.HemisphericLight("light1", new BABYLON.Vector3(0, 1, 0), scene);
+        	light.intensity = 0.7;
+            
+            // material
+        	var mat = new BABYLON.StandardMaterial("mat1", scene);
+        	mat.alpha = 1.0;
+        	mat.diffuseColor = new BABYLON.Color3(0, 1, 0);
+            
+        	//mat.wireframe = true;
+        	mat.backFaceCulling = false;
+            
+            // Données
+            var visees = [{"Point_Depart":"0","Point_Arrive":"0","Longueur":0,"Azimut":0,"Pente":0,"Gauche":0,"Droite":0.87,"Haut":0.66,"Bas":1.13},{"Point_Depart":"0","Point_Arrive":"1","Longueur":9.69,"Azimut":23,"Pente":-30,"Gauche":0.9,"Droite":0,"Haut":0.2,"Bas":0.5},{"Point_Depart":"1","Point_Arrive":"2","Longueur":7.64,"Azimut":27,"Pente":-44,"Gauche":0,"Droite":1,"Haut":0,"Bas":0.8},{"Point_Depart":"2","Point_Arrive":"3","Longueur":13.54,"Azimut":274,"Pente":-85,"Gauche":0,"Droite":3.23,"Haut":14,"Bas":1.2},{"Point_Depart":"3","Point_Arrive":"4","Longueur":3.37,"Azimut":30,"Pente":-20,"Gauche":0.4,"Droite":0.8,"Haut":0,"Bas":0.8},{"Point_Depart":"4","Point_Arrive":"5","Longueur":5.15,"Azimut":25,"Pente":-52,"Gauche":0.6,"Droite":0.6,"Haut":1,"Bas":0},{"Point_Depart":"5","Point_Arrive":"6","Longueur":3.73,"Azimut":12,"Pente":-35,"Gauche":0.8,"Droite":1,"Haut":0.6,"Bas":0.3},{"Point_Depart":"6","Point_Arrive":"7","Longueur":7,"Azimut":358,"Pente":-48,"Gauche":0,"Droite":0.7,"Haut":2,"Bas":0.2},{"Point_Depart":"7","Point_Arrive":"8","Longueur":4.3,"Azimut":48,"Pente":-25,"Gauche":0,"Droite":0.7,"Haut":0.4,"Bas":0.2},{"Point_Depart":"8","Point_Arrive":"9","Longueur":1.03,"Azimut":103,"Pente":3,"Gauche":0.2,"Droite":0,"Haut":0.4,"Bas":0.2},{"Point_Depart":"9","Point_Arrive":"10","Longueur":2.61,"Azimut":41.5,"Pente":10,"Gauche":0.2,"Droite":0.4,"Haut":1,"Bas":0},{"Point_Depart":"10","Point_Arrive":"11","Longueur":1.24,"Azimut":57,"Pente":-23,"Gauche":0.5,"Droite":0,"Haut":1,"Bas":1.3},{"Point_Depart":"11","Point_Arrive":"12","Longueur":2.37,"Azimut":23,"Pente":-40,"Gauche":0.6,"Droite":0,"Haut":1.8,"Bas":6},{"Point_Depart":"12","Point_Arrive":"13","Longueur":2.95,"Azimut":322.5,"Pente":-70,"Gauche":0.4,"Droite":0,"Haut":4,"Bas":1.2},{"Point_Depart":"13","Point_Arrive":"14","Longueur":5.19,"Azimut":9,"Pente":-45,"Gauche":0.2,"Droite":0.6,"Haut":6,"Bas":1},{"Point_Depart":"14","Point_Arrive":"15","Longueur":4.71,"Azimut":40,"Pente":-29,"Gauche":0.2,"Droite":0.4,"Haut":1.2,"Bas":1.3},{"Point_Depart":"15","Point_Arrive":"16","Longueur":3.04,"Azimut":102,"Pente":-15,"Gauche":0.8,"Droite":0,"Haut":0.8,"Bas":2.8},{"Point_Depart":"16","Point_Arrive":"17","Longueur":3.75,"Azimut":32.5,"Pente":-43,"Gauche":0,"Droite":0.8,"Haut":2.5,"Bas":0.6},{"Point_Depart":"17","Point_Arrive":"18","Longueur":1.39,"Azimut":82,"Pente":-35,"Gauche":0,"Droite":0.4,"Haut":1,"Bas":1},{"Point_Depart":"18","Point_Arrive":"19","Longueur":3.9,"Azimut":93,"Pente":-13,"Gauche":0,"Droite":0.5,"Haut":0.4,"Bas":0.6},{"Point_Depart":"19","Point_Arrive":"20","Longueur":2.93,"Azimut":112,"Pente":-35,"Gauche":0.4,"Droite":0,"Haut":0.6,"Bas":0},{"Point_Depart":"20","Point_Arrive":"21","Longueur":1.87,"Azimut":81,"Pente":-4,"Gauche":0,"Droite":0.5,"Haut":0.6,"Bas":0.5},{"Point_Depart":"21","Point_Arrive":"22","Longueur":4.01,"Azimut":95,"Pente":-43,"Gauche":0,"Droite":0.8,"Haut":2,"Bas":0.6},{"Point_Depart":"22","Point_Arrive":"23","Longueur":0.89,"Azimut":164,"Pente":3,"Gauche":0.5,"Droite":0,"Haut":1.5,"Bas":1.1},{"Point_Depart":"23","Point_Arrive":"24","Longueur":1.06,"Azimut":82,"Pente":0,"Gauche":0.3,"Droite":0.4,"Haut":3,"Bas":1.2},{"Point_Depart":"24","Point_Arrive":"25","Longueur":2.9,"Azimut":58,"Pente":-84,"Gauche":0,"Droite":1.2,"Haut":5,"Bas":0.4},{"Point_Depart":"25","Point_Arrive":"26","Longueur":1.64,"Azimut":92,"Pente":-9,"Gauche":0.3,"Droite":0.3,"Haut":0.6,"Bas":0.6},{"Point_Depart":"26","Point_Arrive":"27","Longueur":2.27,"Azimut":25,"Pente":-12,"Gauche":0.6,"Droite":0.6,"Haut":3.5,"Bas":0},{"Point_Depart":"27","Point_Arrive":"28","Longueur":1.92,"Azimut":93,"Pente":53,"Gauche":0.4,"Droite":0,"Haut":1,"Bas":0.5},{"Point_Depart":"28","Point_Arrive":"29","Longueur":1.29,"Azimut":0,"Pente":15,"Gauche":0.15,"Droite":0.5,"Haut":0.6,"Bas":1.6},{"Point_Depart":"29","Point_Arrive":"30","Longueur":4.6,"Azimut":338,"Pente":-23,"Gauche":0,"Droite":0.9,"Haut":1,"Bas":1.8},{"Point_Depart":"30","Point_Arrive":"31","Longueur":4.09,"Azimut":36,"Pente":-45,"Gauche":0,"Droite":0.6,"Haut":1.2,"Bas":4},{"Point_Depart":"31","Point_Arrive":"32","Longueur":3.11,"Azimut":42,"Pente":-31,"Gauche":0,"Droite":0.8,"Haut":0.6,"Bas":4.96},{"Point_Depart":"32","Point_Arrive":"33","Longueur":1.56,"Azimut":80,"Pente":-8,"Gauche":0.6,"Droite":0.2,"Haut":0.2,"Bas":6.8},{"Point_Depart":"33","Point_Arrive":"34","Longueur":6.79,"Azimut":80,"Pente":-90,"Gauche":0.8,"Droite":0.2,"Haut":6.8,"Bas":0},{"Point_Depart":"34","Point_Arrive":"35","Longueur":1.43,"Azimut":3,"Pente":40,"Gauche":0,"Droite":0.62,"Haut":0,"Bas":1.03},{"Point_Depart":"35","Point_Arrive":"36","Longueur":1.96,"Azimut":32,"Pente":-45,"Gauche":0.3,"Droite":0.8,"Haut":1.2,"Bas":1.2},{"Point_Depart":"3§","Point_Arrive":"37","Longueur":3.11,"Azimut":45,"Pente":-52,"Gauche":0.5,"Droite":0.7,"Haut":5.67,"Bas":1.2},{"Point_Depart":"37","Point_Arrive":"38","Longueur":4,"Azimut":60,"Pente":35,"Gauche":2.5,"Droite":0.4,"Haut":0,"Bas":1},{"Point_Depart":"38","Point_Arrive":"39","Longueur":7.17,"Azimut":350,"Pente":-34,"Gauche":0.6,"Droite":0,"Haut":0.4,"Bas":2},{"Point_Depart":"39","Point_Arrive":"40","Longueur":3.17,"Azimut":42,"Pente":-82,"Gauche":0,"Droite":0.4,"Haut":3.6,"Bas":3},{"Point_Depart":"40","Point_Arrive":"41","Longueur":2.47,"Azimut":5,"Pente":-75,"Gauche":0.2,"Droite":0.4,"Haut":3,"Bas":1},{"Point_Depart":"41","Point_Arrive":"42","Longueur":4.23,"Azimut":84.5,"Pente":-20,"Gauche":0,"Droite":0.3,"Haut":1.5,"Bas":1},{"Point_Depart":"42","Point_Arrive":"43","Longueur":1.7,"Azimut":116,"Pente":-42,"Gauche":0.8,"Droite":0,"Haut":3.6,"Bas":3.47},{"Point_Depart":"43","Point_Arrive":"44","Longueur":3.44,"Azimut":78,"Pente":-54,"Gauche":1.6,"Droite":0.5,"Haut":6.56,"Bas":1},{"Point_Depart":"44","Point_Arrive":"45","Longueur":4.28,"Azimut":83,"Pente":6.7,"Gauche":0.3,"Droite":0.3,"Haut":0.6,"Bas":3.2},{"Point_Depart":"45","Point_Arrive":"46","Longueur":2.62,"Azimut":11,"Pente":-60,"Gauche":0.2,"Droite":0.6,"Haut":1.2,"Bas":2.8},{"Point_Depart":"46","Point_Arrive":"47","Longueur":2.06,"Azimut":2,"Pente":-26,"Gauche":0.3,"Droite":0.5,"Haut":0.3,"Bas":0.93},{"Point_Depart":"47","Point_Arrive":"48","Longueur":2.43,"Azimut":19,"Pente":-57.5,"Gauche":0.3,"Droite":1,"Haut":0.6,"Bas":0.8},{"Point_Depart":"48","Point_Arrive":"49","Longueur":4.5,"Azimut":93,"Pente":-42,"Gauche":0.9,"Droite":0,"Haut":0.25,"Bas":0.65},{"Point_Depart":"49","Point_Arrive":"50","Longueur":3.83,"Azimut":42,"Pente":-46.7,"Gauche":0.5,"Droite":0.3,"Haut":1.16,"Bas":0.2},{"Point_Depart":"50","Point_Arrive":"51","Longueur":2.04,"Azimut":61,"Pente":-44.9,"Gauche":0,"Droite":0.6,"Haut":0.6,"Bas":0.9},{"Point_Depart":"51","Point_Arrive":"52","Longueur":3.63,"Azimut":54,"Pente":-43.1,"Gauche":0.3,"Droite":0.6,"Haut":0,"Bas":1.45},{"Point_Depart":"52","Point_Arrive":"53","Longueur":2.77,"Azimut":139,"Pente":-9.5,"Gauche":0.8,"Droite":0.4,"Haut":2.2,"Bas":1.15},{"Point_Depart":"53","Point_Arrive":"54","Longueur":3.9,"Azimut":77.5,"Pente":-41.6,"Gauche":0.65,"Droite":0.2,"Haut":0.22,"Bas":0.64},{"Point_Depart":"54","Point_Arrive":"55","Longueur":6,"Azimut":54,"Pente":-44,"Gauche":0.3,"Droite":0.64,"Haut":0.66,"Bas":1.26},{"Point_Depart":"55","Point_Arrive":"56","Longueur":3.18,"Azimut":152,"Pente":-33.8,"Gauche":0.35,"Droite":0,"Haut":0.63,"Bas":0.63},{"Point_Depart":"56","Point_Arrive":"57","Longueur":1.96,"Azimut":105,"Pente":5.3,"Gauche":0.52,"Droite":0,"Haut":1.74,"Bas":0.57},{"Point_Depart":"57","Point_Arrive":"58","Longueur":1.02,"Azimut":55,"Pente":-2.1,"Gauche":0.2,"Droite":0.4,"Haut":0,"Bas":2.492},{"Point_Depart":"58","Point_Arrive":"59","Longueur":3.34,"Azimut":107,"Pente":-48.3,"Gauche":1,"Droite":0.4,"Haut":0.6,"Bas":0},{"Point_Depart":"59","Point_Arrive":"60","Longueur":4.77,"Azimut":67,"Pente":-27,"Gauche":0.2,"Droite":0.34,"Haut":0.24,"Bas":0.96},{"Point_Depart":"60","Point_Arrive":"61","Longueur":2.42,"Azimut":113,"Pente":-2,"Gauche":0.9,"Droite":0.25,"Haut":0,"Bas":1},{"Point_Depart":"61","Point_Arrive":"62","Longueur":3.97,"Azimut":133,"Pente":-6,"Gauche":0.45,"Droite":0,"Haut":0.4,"Bas":0.5},{"Point_Depart":"62","Point_Arrive":"65","Longueur":3.2,"Azimut":140,"Pente":-12,"Gauche":0.3,"Droite":0.2,"Haut":0,"Bas":0.6},{"Point_Depart":"65","Point_Arrive":"66","Longueur":2.76,"Azimut":99,"Pente":-73,"Gauche":1.75,"Droite":0,"Haut":2.85,"Bas":1},{"Point_Depart":"66","Point_Arrive":"67","Longueur":3.58,"Azimut":93,"Pente":-34,"Gauche":0,"Droite":0.3,"Haut":2.55,"Bas":1.6},{"Point_Depart":"67","Point_Arrive":"68","Longueur":2.75,"Azimut":92,"Pente":-33,"Gauche":0.2,"Droite":0,"Haut":2.8,"Bas":1.61},{"Point_Depart":"68","Point_Arrive":"69","Longueur":1.85,"Azimut":48,"Pente":-3,"Gauche":0,"Droite":0.25,"Haut":1.23,"Bas":0.6},{"Point_Depart":"69","Point_Arrive":"70","Longueur":2.41,"Azimut":100,"Pente":15,"Gauche":0.2,"Droite":0.3,"Haut":0.2,"Bas":1.1},{"Point_Depart":"70","Point_Arrive":"71","Longueur":2.67,"Azimut":4,"Pente":-83,"Gauche":0.3,"Droite":0.3,"Haut":0.8,"Bas":0},{"Point_Depart":"71","Point_Arrive":"72","Longueur":3.72,"Azimut":133,"Pente":3,"Gauche":0,"Droite":0.4,"Haut":0.4,"Bas":0.3},{"Point_Depart":"72","Point_Arrive":"73","Longueur":4.05,"Azimut":155,"Pente":-12,"Gauche":0.6,"Droite":0,"Haut":0.2,"Bas":0.8},{"Point_Depart":"73","Point_Arrive":"74","Longueur":2.45,"Azimut":83,"Pente":-11,"Gauche":0.8,"Droite":1.5,"Haut":0,"Bas":4.4},{"Point_Depart":"74","Point_Arrive":"75","Longueur":7.97,"Azimut":56,"Pente":-49,"Gauche":1.6,"Droite":1.9,"Haut":0.9,"Bas":1.65},{"Point_Depart":"75","Point_Arrive":"76","Longueur":12.1,"Azimut":105,"Pente":-90,"Gauche":1.3,"Droite":2,"Haut":12,"Bas":0},{"Point_Depart":"76","Point_Arrive":"77","Longueur":1.9,"Azimut":95,"Pente":36,"Gauche":2.2,"Droite":0.2,"Haut":2.5,"Bas":1.3},{"Point_Depart":"77","Point_Arrive":"78","Longueur":5.27,"Azimut":99,"Pente":38,"Gauche":0,"Droite":0.44,"Haut":0.7,"Bas":1},{"Point_Depart":"78","Point_Arrive":"79","Longueur":1.3,"Azimut":87,"Pente":-18,"Gauche":0,"Droite":0.4,"Haut":2.6,"Bas":0.8},{"Point_Depart":"79","Point_Arrive":"80","Longueur":1.95,"Azimut":149,"Pente":-7,"Gauche":0.4,"Droite":0,"Haut":0.4,"Bas":0.7},{"Point_Depart":"80","Point_Arrive":"81","Longueur":12.7,"Azimut":13,"Pente":-79,"Gauche":3,"Droite":3,"Haut":3.3,"Bas":1.53},{"Point_Depart":"81","Point_Arrive":"1","Longueur":5.26,"Azimut":127,"Pente":-14,"Gauche":1,"Droite":0.34,"Haut":6.63,"Bas":5.52},{"Point_Depart":"1","Point_Arrive":"2","Longueur":4.41,"Azimut":13,"Pente":-74,"Gauche":2.14,"Droite":0,"Haut":3.63,"Bas":0.82},{"Point_Depart":"2","Point_Arrive":"3","Longueur":5.71,"Azimut":332,"Pente":-13.5,"Gauche":0.3,"Droite":0,"Haut":1.27,"Bas":0.8},{"Point_Depart":"3","Point_Arrive":"4","Longueur":1.46,"Azimut":292,"Pente":-14.5,"Gauche":0.5,"Droite":2.28,"Haut":1.51,"Bas":0.53},{"Point_Depart":"4","Point_Arrive":"5","Longueur":5.9,"Azimut":54,"Pente":-16,"Gauche":0.6,"Droite":0,"Haut":0.82,"Bas":0.5},{"Point_Depart":"5","Point_Arrive":"6","Longueur":2.32,"Azimut":355,"Pente":-17,"Gauche":0.46,"Droite":0,"Haut":0.6,"Bas":0.2},{"Point_Depart":"6","Point_Arrive":"7","Longueur":2.4,"Azimut":321,"Pente":-40,"Gauche":0.5,"Droite":0.1,"Haut":0.8,"Bas":0.3},{"Point_Depart":"7","Point_Arrive":"8","Longueur":2.04,"Azimut":300,"Pente":-15,"Gauche":0,"Droite":0.4,"Haut":0.81,"Bas":0.3},{"Point_Depart":"8","Point_Arrive":"9","Longueur":2,"Azimut":347,"Pente":-18,"Gauche":0.38,"Droite":0.82,"Haut":1,"Bas":0},{"Point_Depart":"9","Point_Arrive":"10","Longueur":3.2,"Azimut":13,"Pente":-38,"Gauche":0,"Droite":0.67,"Haut":0.45,"Bas":2.24},{"Point_Depart":"10","Point_Arrive":"11","Longueur":2.21,"Azimut":90,"Pente":-43,"Gauche":2,"Droite":0,"Haut":0.2,"Bas":0.55},{"Point_Depart":"11","Point_Arrive":"12","Longueur":11.9,"Azimut":30,"Pente":-50,"Gauche":6,"Droite":3.85,"Haut":0.9,"Bas":0.44},{"Point_Depart":"12","Point_Arrive":"13","Longueur":5,"Azimut":66,"Pente":-46,"Gauche":0,"Droite":0,"Haut":0,"Bas":0}]
+
+            // Calculs
+            var points_polygo =[];
+            var points_gauche =[];
+            var points_droite =[];
+            var points_haut =[];
+            var points_bas =[];
+            var sections =[];
+            var sections_Bezier2=[];
+            
+            var x = 0;
+            var y = 0;
+            var z = 0;
+            
+            var radians = Math.PI/180
+            
+            var azg = 0;
+            var azd = 0;
+            
+            for(var i = 0; i < visees.length; i++){
+                
+                var longueur = visees[i].Longueur;
+                var azimut = visees[i].Azimut * radians;
+                var pente = visees[i].Pente * radians;
+                
+                var longueur_h = longueur * Math.cos(pente);
+                var dx = longueur_h * Math.sin(azimut);
+                var dy = longueur_h * Math.cos(azimut);
+                var dz = longueur * Math.sin(pente);
+        
+                var x = x + dx;
+                var y = y + dy;
+                var z = z + dz;
+                
+                // calcul des points gauche et droit
+                switch (i) {
+                    case 0:
+                        azg=visees[i+1].Azimut-90;
+                        azd=visees[i+1].Azimut+90;
+                        break;
+                     
+                    case (visees.length-1):
+                        azg=visees[i].Azimut-90;
+                        azd=visees[i].Azimut+90;
+                        break;
+                       
+                    default :
+                        var az1 = visees[i].Azimut;
+                        var az2 = visees[i+1].Azimut;
+                        azd = ((az1+az2)/2) +90;
+                      
+                         if (az1>180) {
+                            if (az2<=(az1-180)){
+                                azd = azd - 180;
+                            }
+                         } else {
+                             if (az2 > (az1+180)) {
+                                azd = azd - 180;
+                             }
+                         }  
+                        azg=azd+180;
+                }
+                
+                var xg = x + (visees[i].Gauche*Math.sin(azg*radians))
+                var yg = y + (visees[i].Gauche*Math.cos(azg*radians))
+                
+                var xd = x + (visees[i].Droite*Math.sin(azd*radians))
+                var yd = y + (visees[i].Droite*Math.cos(azd*radians))
+                
+                var zh =  z + visees[i].Haut;
+                var zb =  z - visees[i].Bas;
+        
+        		points_polygo.push( new BABYLON.Vector3(x, z, y) );
+                
+                var Gauche = new BABYLON.Vector3(xg, z, yg);
+                var Droite = new BABYLON.Vector3(xd, z, yd);
+                var Haut = new BABYLON.Vector3(x, zh, y);
+                var Bas = new BABYLON.Vector3(x, zb, y);
+                
+                var Gauche_Haut=new BABYLON.Vector3(xg, zh, yg);
+                var Gauche_Bas=new BABYLON.Vector3(xg, zb, yg);
+                var Droite_Haut=new BABYLON.Vector3(xd, zh, yd);
+                var Droite_Bas=new BABYLON.Vector3(xd, zb, yd);
+
+                var nbr = 25;
+
+                var CurveA = BABYLON.Curve3.CreateQuadraticBezier(Bas,Droite_Bas,Droite,nbr);
+                var CurveB = BABYLON.Curve3.CreateQuadraticBezier(Droite,Droite_Haut,Haut,nbr);
+                var CurveC = BABYLON.Curve3.CreateQuadraticBezier(Haut,Gauche_Haut,Gauche,nbr);
+                var CurveD = BABYLON.Curve3.CreateQuadraticBezier(Gauche,Gauche_Bas,Bas,nbr);
+                var FullCurve= CurveA.continue(CurveB).continue(CurveC).continue(CurveD);
+                
+                sections_Bezier2.push(FullCurve.getPoints());
+                                
+                points_gauche.push( Gauche);
+                points_droite.push( Droite);
+                points_haut.push( Haut );
+                points_bas.push( Bas );
+                
+                var section = [Gauche,Haut,Droite,Bas,Gauche];
+                sections.push(section);
+                
+            }
+            
+        	var polygonale = BABYLON.Mesh.CreateLines("polygonale", points_polygo, scene);
+            polygonale.color = new BABYLON.Color3(1, 0, 0);
+            
+//            var chemin_gauche = BABYLON.Mesh.CreateLines("gauche", points_gauche, scene);
+//            var chemin_droite = BABYLON.Mesh.CreateLines("droite", points_droite, scene);
+//            var chemin_haut = BABYLON.Mesh.CreateLines("haut", points_haut, scene);
+//            var chemin_bas = BABYLON.Mesh.CreateLines("bas", points_bas, scene);
+            
+            var Enveloppe = BABYLON.Mesh.CreateRibbon("Section ruban",sections_Bezier2,false, false, 0, scene);
+            Enveloppe.material = mat;
+            
+            var min = Enveloppe.getBoundingInfo().boundingBox.minimum;
+            var max = Enveloppe.getBoundingInfo().boundingBox.maximum;
+            
+            var Largeur_Scene =max.x-min.x;
+            var Profondeur_Scene = max.z-min.z;
+            var Hauteur_Scene = max.y-min.y;
+            
+            var center = new BABYLON.Vector3(Largeur_Scene/2, Hauteur_Scene/2, Profondeur_Scene/2);
+            
+            var vecteur_deplacement=new BABYLON.Vector3(-center.x,center.y,-center.z);
+            
+            Enveloppe.position = vecteur_deplacement;
+            polygonale.position = vecteur_deplacement;
+            
+//            chemin_gauche.position = vecteur_deplacement;
+//            chemin_droite.position = vecteur_deplacement;
+//            chemin_haut.position = vecteur_deplacement;
+//            chemin_bas.position = vecteur_deplacement;
+            
+            Enveloppe.showBoundingBox = true;
+            
+            var Hauteur_Plancher=min.y+center.y;
+           
+            // Ground
+            var ground = BABYLON.Mesh.CreateGround("ground", Largeur_Scene, Profondeur_Scene, 1, scene);
+            ground.position.y = Hauteur_Plancher;
+            
+            // Nord
+            var nord_path = new BABYLON.Path2(0,0);
+            nord_path.addLineTo(3,-10);
+            nord_path.addLineTo(0,10);
+            nord_path.addLineTo(-3,-10);
+            nord_path.addLineTo(0,0);
+            var nord = new BABYLON.PolygonMeshBuilder("nord", nord_path, scene);
+            var norde = nord.build(false, 0.5);
+            norde.position.y=Hauteur_Plancher + 5;
+            var matNord = new BABYLON.StandardMaterial("matnord", scene);
+        	matNord.alpha = 1.0;
+        	matNord.diffuseColor = new BABYLON.Color3(0,0, 1);
+            
+            norde.material = matNord;
+            
+            return scene;
+        };
+        
+        var engine = new BABYLON.Engine(canvas, true, { preserveDrawingBuffer: true, stencil: true });
+        var scene = createScene();
+
+        engine.runRenderLoop(function () {
+            if (scene) {
+                scene.render();
+            }
+        });
+
+//        // Resize
+//        window.addEventListener("resize", function () {
+//            engine.resize();
+//        });
+    </script>
+</body>
+</html>
