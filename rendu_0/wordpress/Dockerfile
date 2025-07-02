@@ -1,7 +1,7 @@
 FROM alpine:3.21
-# FROM debian:11
 
-RUN apk update && apk upgrade \
+RUN apk update \
+    && apk upgrade \
     && apk add --no-cache \
         php83 \
         php83-fpm \
@@ -27,10 +27,6 @@ RUN apk update && apk upgrade \
         curl \
 	    mariadb-client \
     && rm -rf /var/cache/apk/*
-# RUN apt-get update -y && apt-get upgrade -y \
-#     && apt-get install -y \
-#     php php-fpm php-mysql curl \
-#     && rm -rf /var/lib/apt/lists/*
 
 # Install wp-cli (needed by script entrypoint)
 RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \
@@ -46,7 +42,6 @@ COPY entrypoint.sh /scripts/entrypoint.sh
 RUN chmod +x /scripts/entrypoint.sh
 
 WORKDIR /var/www/html
-# WORKDIR	/var/www/wordpress/
 
 EXPOSE 9000
 
