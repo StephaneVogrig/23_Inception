@@ -79,3 +79,19 @@ Et verifier apres redemarrage qu'elle est toujours modifiees.
 Links:  
 - [Wikipedia - Redis](https://fr.wikipedia.org/wiki/Redis)
 - [Run Redis Open Source on Docker](https://redis.io/docs/latest/operate/oss_and_stack/install/install-stack/docker/)
+- [Setting up Redis on Alpine Linux](https://krython.com/post/setting-up-redis-on-alpine-linux)
+utilisation avec redis-cli:
+redis-cli -h 127.0.0.1 -p 6380
+Une fois connecté, tu peux exécuter des commandes Redis simples, par exemple :
+
+ping (devrait répondre PONG)
+
+set mykey "Hello Redis"
+
+get mykey (devrait retourner "Hello Redis")
+
+exit pour quitter.
+
+## [cAdvisor](https://github.com/google/cadvisor)
+links: 
+- [medium](https://medium.com/@varunjain2108/monitoring-docker-containers-with-cadvisor-prometheus-and-grafana-d101b4dbbc84)

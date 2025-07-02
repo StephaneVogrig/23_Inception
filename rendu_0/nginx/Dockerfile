@@ -4,7 +4,8 @@ RUN apk update \
 	&& apk upgrade \
 	&& apk add --no-cache \
 		nginx \
-		openssl
+		openssl \
+    && rm -rf /var/cache/apk/*
 
 COPY server.conf /etc/nginx/http.d
 

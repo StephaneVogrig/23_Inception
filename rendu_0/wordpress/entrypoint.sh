@@ -20,12 +20,10 @@ if [ ! -f "/var/www/html/wp-config.php" ]; then
 	log "wp-config.php not found. Installingand configuring wordpress..."
 
 	log "Download WordPress core"
-	wp core download	--path="/var/www/html" \
-						--allow-root
+	wp --allow-root core download	--path="/var/www/html"
 
 	log "Create config"
-	wp config create	--path="/var/www/html" \
-						--allow-root \
+	wp --allow-root config create	--path="/var/www/html" \
 						--dbname=$WP_DB_NAME \
 						--dbuser=$WP_DB_USER \
 						--dbpass=$WP_DB_PASSWORD \
@@ -33,9 +31,8 @@ if [ ! -f "/var/www/html/wp-config.php" ]; then
 						--skip-check
 
 	log "Install WordPress core"
-	wp core install	--path="/var/www/html" \
-					--allow-root \
-					--url=$WP_URL \
+	wp --allow-root core install	--path="/var/www/html" \
+					--url=https://$WP_URL \
 					--title=$WP_TITLE \
 					--admin_user=$WP_ADMIN \
 					--admin_password=$WP_ADMIN_PASS \
@@ -43,14 +40,21 @@ if [ ! -f "/var/www/html/wp-config.php" ]; then
 					--skip-email
 
 	log "Create user"
-	wp user create	--path="/var/www/html" \
-					--allow-root $WP_USER $WP_EMAIL \
+	wp --allow-root user create	--path="/var/www/html" \
+					$WP_USER $WP_EMAIL \
 					--user_pass=$WP_PASS \
 					--role='contributor'
+
+	log "Installing redis-cache plugin"
+	wp --allow-root config set WP_REDIS_HOST $REDIS_HOSTNAME
+	wp --allow-root config set WP_REDIS_PORT $REDIS_PORT
+	wp --allow-root config set WP_CACHE_KEY_SALT $WP_URL
+	wp --allow-root plugin install redis-cache --activate
+	wp --allow-root plugin update --all
+	wp --allow-root redis enable
 else
 	log "WordPress already installed, skipping installation."
 fi
 
 log "Starting php-fpm..."
 exec /usr/sbin/php-fpm83 -F
-# exec /usr/sbin/php-fpm7.4 -F

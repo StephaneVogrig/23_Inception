@@ -1,15 +1,16 @@
 FROM alpine:3.21
 
 RUN apk update \
-	&& apk upgrade \
-	&& apk add --no-cache \
+    && apk upgrade \
+    && apk add --no-cache \
         php83 \
         php83-session \
         php83-mysqli \
         php83-pdo_mysql \
         php83-json \
         php83-mbstring \
-        curl
+        curl \
+    && rm -rf /var/cache/apk/*
 
 RUN mkdir -p /var/www
 

@@ -4,7 +4,8 @@ RUN apk update \
 	&& apk upgrade \
 	&& apk add --no-cache \
         mariadb \
-        mariadb-client
+        mariadb-client \
+    && rm -rf /var/cache/apk/*
 
 COPY entrypoint.sh /scripts/entrypoint.sh
 RUN chmod +x /scripts/entrypoint.sh
