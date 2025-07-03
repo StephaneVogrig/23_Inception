@@ -60,6 +60,8 @@ Links:
 - [Comment installer WordPress](https://fr.wordpress.org/support/article/how-to-install-wordpress/)
 - [Installer WordPress en 3 méthodes](https://wpformation.com/installer-wordpress/)
 
+https://www.datanovia.com/en/fr/lessons/fichiers-dinstallation-de-docker-wordpress-exemple-pour-le-developpement-local/
+
 #### Correction
 - **Ajouter un commentaire a un blog**  
 Et verifier apres redemarrage qu'il est present.
@@ -95,3 +97,7 @@ exit pour quitter.
 ## [cAdvisor](https://github.com/google/cadvisor)
 links: 
 - [medium](https://medium.com/@varunjain2108/monitoring-docker-containers-with-cadvisor-prometheus-and-grafana-d101b4dbbc84)
+
+## ftp
+
+ftp localhost

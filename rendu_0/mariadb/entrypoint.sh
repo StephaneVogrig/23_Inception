@@ -7,6 +7,22 @@ log() {
     echo "[$(date '+%Y-%m-%d %H:%M:%S')] $1" >&2
 }
 
+# Function to check if a variable is set and not empty
+check_env_var() {
+    local var_name="$1"
+    local var_value="$2"
+    
+    if [ -z "$var_value" ]; then
+        log "ERROR: Environment variable $var_name is not set or is empty"
+        exit 1
+    fi
+}
+
+check_env_var "MYSQL_DATABASE" "$MYSQL_DATABASE"
+check_env_var "MYSQL_ROOT_PASSWORD" "$MYSQL_ROOT_PASSWORD"
+check_env_var "MYSQL_USER" "$MYSQL_USER"
+check_env_var "MYSQL_PASSWORD" "$MYSQL_PASSWORD"
+
 if [ -d "/run/mysqld" ]; then
 	log "mysqld exist, skipping creation"
 else
@@ -15,17 +31,16 @@ else
   chown -R mysql:mysql /run/mysqld
 fi
 
-# Initialization database
-if [ ! -d "/var/lib/mysql/mysql" ]; then
-
-  log "Database initialisation..."
+log "Database initialisation..."
+if [ -d "/var/lib/mysql/mysql" ]; then
+	log "Database already exist, skipping"
+else
+	log "mysql not found. Installing and configuring..."
 
   log "Initialize the data directory"
   mariadb-install-db --user=mysql --basedir=/usr --datadir=/var/lib/mysql > /dev/null
 
   log "Start MariaDB temporarily in the background for initialization"
-  # Use --skip-networking to avoid external connections during setup
-  # Use --skip-name-resolve for faster startup
   mariadbd --user=mysql --skip-networking --skip-name-resolve --socket=/run/mysqld/mysqld.sock &
   MYSQL_PID=$!
 
@@ -46,17 +61,16 @@ if [ ! -d "/var/lib/mysql/mysql" ]; then
   log "Execute SQL commands"
   mariadb -hlocalhost <<-EOSQL
     DROP DATABASE IF EXISTS test;
-    CREATE DATABASE IF NOT EXISTS \`${MYSQL_DATABASE}\`;
-    CREATE USER IF NOT EXISTS '${MYSQL_USER}'@'%' IDENTIFIED BY '${MYSQL_PASSWORD}';
-    GRANT ALL PRIVILEGES ON \`${MYSQL_DATABASE}\`.* TO '${MYSQL_USER}'@'%';
-    ALTER USER 'root'@'localhost' IDENTIFIED BY '${MYSQL_ROOT_PASSWORD}';
+    CREATE DATABASE IF NOT EXISTS \`$MYSQL_DATABASE\`;
+    CREATE USER IF NOT EXISTS '$MYSQL_USER'@'%' IDENTIFIED BY '$MYSQL_PASSWORD';
+    GRANT ALL PRIVILEGES ON \`$MYSQL_DATABASE\`.* TO '$MYSQL_USER'@'%';
+    ALTER USER 'root'@'localhost' IDENTIFIED BY '$MYSQL_ROOT_PASSWORD';
     FLUSH PRIVILEGES;
 	EOSQL
 
-  # Shut down the temporary MariaDB instance
   log "Shutting down temporary MariaDB instance..."
-  kill ${MYSQL_PID}
-  wait ${MYSQL_PID} || true # Wait for the process to exit, ignore errors if it's already gone
+  kill $MYSQL_PID
+  wait $MYSQL_PID || true
 
 fi
 
